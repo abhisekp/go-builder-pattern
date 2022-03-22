@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
+	"time"
 
 	"github.com/bxcodec/faker/v3"
 
@@ -34,14 +35,16 @@ func main() {
 		wg2.Add(1)
 		go func() {
 			defer wg2.Done()
+			rand.Seed(time.Now().UnixNano())
 			userBuilder.
-				SetAge(30)
+				SetAge(rand.Int63n(100))
 		}()
 
 		wg2.Add(1)
 		go func() {
 			defer wg2.Done()
 
+			rand.Seed(time.Now().UnixNano())
 			genderChoices := []gender.Gender{gender.Male, gender.Female}
 			idx := rand.Intn(len(genderChoices))
 
@@ -55,7 +58,7 @@ func main() {
 
 			addressBuilder := Address.NewBuilder()
 			addressBuilder.
-				// SetLine1("No. 111").
+				SetLine1("No. 111").
 				// SetLine2("Jalan Taman").
 				SetCity("Kuala Lumpur").
 				SetState("Wilayah Persekutuan").
@@ -82,7 +85,7 @@ func main() {
 		wg2.Add(1)
 		go func(wg *sync.WaitGroup) {
 			defer wg.Done()
-			fmt.Println(user.String())
+			fmt.Println(user.String("json"))
 		}(&wg2)
 		wg2.Wait()
 	}()

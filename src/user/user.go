@@ -112,7 +112,7 @@ func (u *User) Roles() []role.Role {
 	return u.roles
 }
 
-func (u *User) String() string {
+func (u *User) String(outputFormat string) string {
 	msg := ""
 
 	name := u.Name()
